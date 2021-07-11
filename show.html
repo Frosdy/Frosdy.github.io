@@ -1,0 +1,115 @@
+<html><head>
+    </head>
+    <body style="
+        margin-left: 0px;
+        margin-top: 0px;
+                 ">
+        <div style="
+        display: flex;
+        margin-top: 0;
+        justify-content: center;
+        align-items: flex-start;
+        ">
+        <canvas onClick="getMousePos()" style="margin-left: 0;" id="myCanvas" width="800" height="400"
+></canvas>
+        <img id="map" src="media/map.webp" alt="A map" style="
+        display: none;
+        width: 0;
+        height: 1500;
+        ">
+        <div>
+        <input type="number" id="x" style="margin-left: 5; width:50px; margin-top: 0;">
+        <input type="number" id="y" style="margin-left: 3; width:50px; margin-top: 0;">
+        
+        <button class="button" style="margin-top: 0;margin-left: 3;padding: 6;border-radius: 20px;user-select: none;" onClick="me()">Press Me</button>
+        <div style="margin-left: 5;">
+        <p id="text1">X:   0</p>
+        <p id="text2">Y:   0</p>
+        </div>
+        </div>
+        </div>
+        <script>
+            
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var img = document.getElementById("map");
+            var imageX = 10118;
+            var imageY = 5376;
+            var rescale = 0.13;
+            var halfY = imageY / 2;
+            var halfX = imageX / 2;
+            ctx.canvas.width  = imageX * rescale
+            ctx.canvas.height = imageY * rescale
+
+            
+            
+            
+            window.onload = function() {
+
+                ctx.drawImage(img, 0, 0, imageX * rescale, imageY * rescale);
+
+            };
+            
+
+            
+            function me() {
+                clear();
+                var in1 = document.getElementById("x").value;
+                var in2 = document.getElementById("y").value;
+                console.log(in1 * rescale + " " + in2 * rescale);
+                ctx.beginPath();
+                ctx.lineWidth = "2"
+                ctx.strokeStyle = "red"
+                ctx.rect((in1 * rescale) - 7 + halfX * rescale + 0, (in2 * rescale) - 7 + halfY * rescale + 0, 7, 7);
+                ctx.stroke();
+            };
+            
+            function clear() {
+                ctx.clearRect(0, 0, c.width, c.height);
+                ctx.drawImage(img, 0, 0, imageX * rescale, imageY * rescale);
+            };
+            /*
+            function getMousePos() {
+                let strign = "hello";
+                let rect = c.getBoundingClientRect();
+                let x = event.clientX - rect.left;
+                let x1 = x / rescale - halfX
+                let y = event.clientY - rect.top;
+                let y1 = y / rescale - halfY
+                //console.log("Coordinate x: " + (parseInt(x) / rescale - 5000),
+                  //          "coordinate y: " + (parseInt(y) / rescale - 3000-300))
+                document.getElementById("text1").innerHTML = "X:   " + Math.round(x1);
+                document.getElementById("text2").innerHTML = "Y:   " + Math.round(y1);
+            };
+            */
+            document.onmousemove = handleMouseMove;
+            function handleMouseMove(event) {
+                var eventDoc, doc, body;
+                let strign = "hello";
+                let rect = c.getBoundingClientRect();
+                let x = event.clientX - rect.left;
+                let x1 = x / rescale - halfX
+                let y = event.clientY - rect.top;
+                let y1 = y / rescale - halfY
+                //console.log("Coordinate x: " + (parseInt(x) / rescale - halfX),
+                  //          "coordinate y: " + (parseInt(y) / rescale - halfY))
+                if (x1 < halfX && x1 > -halfX && y1 < halfY && y1 > -halfY) {
+                    
+                document.getElementById("text1").innerHTML = "X:   " + Math.round(x1);
+                document.getElementById("text2").innerHTML = "Y:   " + Math.round(y1);
+                }
+                
+            };
+                
+            
+        </script>
+        <style>
+            button{
+                
+            }
+            button:active {
+                box-shadow: none;
+            }
+        </style>
+
+    </body></html>

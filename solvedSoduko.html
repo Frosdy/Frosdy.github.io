@@ -1,0 +1,186 @@
+	<html>
+	<head>
+
+	</head>
+	<body style="background-image: url(media/matrix123.png);">
+		<div style="
+			 display: flex;
+			 flex-direction: column;
+			 align-items: center;
+			 margin-top: 50;
+		">
+		<canvas id="canvas" style="border: 1px solid black; background-color: white;" width=450 height=450></canvas>
+		<button style="margin-left: 5px;"  onClick="toCan()">Press me to get the answer</button>
+		</div>
+
+
+
+
+
+
+		<script>
+			can = document.getElementById("canvas")
+			ctx = can.getContext("2d")
+			var pos = []
+			var str = 3
+			
+			
+			clear()
+			function clear() {
+			ctx.clearRect(0, 0, can.width, can.height)
+			/*ctx.fillStyle = "white"
+			ctx.fillRect(0, 0, can.width, can.height) */
+			for (v = 0; v < 3 * str; v++) {
+				for (i = 0; i < 3 * str; i++) {
+					ctx.beginPath()
+					ctx.lineWidth = "2"
+					ctx.rect(50 * i, 50 * v, 50, 50)
+					ctx.stroke()
+				}
+			}
+			for (v = 0; v < 1 * str; v++) {
+				for (i = 0; i < 1 * str; i++) {
+					ctx.beginPath()
+					ctx.lineWidth = "5"
+					ctx.rect(150 * i, 150 * v, 150, 150)
+					ctx.stroke()
+				}
+			}
+			}
+
+
+			function main() {
+				for (window.p = 0; p < 1 * str; p++) {
+					for (window.o = 0; o < 1 * str; o++) {
+						start()
+					}
+				}
+			}
+
+			function start(exclude) {
+				window.n = Math.floor(Math.random() * 3)
+				window.n2 = Math.floor(Math.random() * 3)
+				window.n3 = Math.floor(Math.random() * 3 * str) + 1
+				for (i = 0; i < pos.length; i++) {
+					if (pos[i]["n3"] == n3 || pos[i]["n"] == n && pos[i]["n2"] == n2) {
+						exclude = n3
+						start(exclude)
+						return
+					}
+				}
+				if (n3 == exclude) {
+					start(exclude)
+
+
+				} else {
+					ctx.font = "50px arial"
+					ctx.fillText(n3, n * 50 + (150 * o) + 10, 50 * n2 + (150 * p) + 45)
+					//console.log(n + " " + n2)
+					pos.push({
+						n: n,
+						n2: n2,
+						n3: n3,
+						o: window.o,
+						p: window.p
+					})
+					console.log((n + window.o * 3 + 1) + " " + (n2 + window.p * 3 + 1))
+					return
+				}
+			}
+			main()
+			console.log(pos)
+
+
+
+
+			const _board = [
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+				['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+			];
+
+
+
+
+			function convert() {
+				//for (i = 0; i < pos.length; i++) {
+				/*for (x = 0; x < _board.length; x++) {
+							  _board[x][pos[x]["n"] + pos[x]["o"] * 3] = pos[x]["n3"]
+						 } */
+
+				for(i = 0; i < pos.length; i++) {
+					_board[pos[i]["n2"] + pos[i]["p"] * 3][pos[i]["n"] + pos[i]["o"] * 3] = pos[i]["n3"].toString()
+
+				}
+
+			}
+			convert()
+
+			sodokoSolver(_board);
+			console.log(_board);
+
+			function isValid(board, row, col, k) {
+				for (let i = 0; i < 9; i++) {
+					const m = 3 * Math.floor(row / 3) + Math.floor(i / 3);
+					const n = 3 * Math.floor(col / 3) + i % 3;
+					if (board[row][i] == k || board[i][col] == k || board[m][n] == k) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+
+			function sodokoSolver(data) {
+				for (let i = 0; i < 9; i++) {
+					for (let j = 0; j < 9; j++) {
+						if (data[i][j] == '.') {
+							for (let k = 1; k <= 9; k++) {
+								if (isValid(data, i, j, k)) {
+									data[i][j] = `${k}`;
+									if (sodokoSolver(data)) {
+										return true;
+									} else {
+										data[i][j] = '.';
+									}
+								}
+							}
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+
+
+			function convertBack() {
+				window.so = []
+				for (i = 0; i < _board.length; i++) {
+				    for (u = 0; u < _board[i].length; u++) {
+						window.so.push({n: i, n2: u, n3: _board[i][u]})
+					}
+				}
+				console.log(so)
+			}
+
+
+      	convertBack()
+			
+			function toCan() {
+			clear()
+			for (i = 0; i < window.so.length; i++) {
+				ctx.font = "50px arial"
+				ctx.fillText(window.so[i]["n3"], window.so[i]["n2"] * 50 + 10, 50 * window.so[i]["n"] + 45)
+			}
+			}
+			//console.log(n + " " + n2)
+			//console.log((n + window.o * 3 + 1) + " " + (n2 + window.p * 3 + 1))
+		</script>
+	</body>
+</html>

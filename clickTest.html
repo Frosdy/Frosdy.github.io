@@ -1,0 +1,91 @@
+<html>
+    <head>
+        
+    </head>
+    
+    <body style="background-image: url(media/gradient.jpg);
+                 background-size: cover;">
+        <p id="number" style="text-align: center; user-select: none;">Times clicked: 0</p>
+        <p id="cps" style="text-align: center; user-select: none">Your CPS and time will show up here</p>
+        <div style="display:flex; justify-content: center; margin-top: 105">
+        <canvas onClick="whenClicked()" id="myCanvas" width=800 height=494.4 style="
+        border: 1px solid black;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px 0px #000000;
+        background-color: white;                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    "
+                
+        ></canvas>
+        </div>
+        
+        
+        
+        <script>
+            var can = document.getElementById("myCanvas")
+            var ctx = can.getContext("2d");
+            var text = document.getElementById("number")
+            var text2 = document.getElementById("cps")
+            var pressed = 0;
+            var fulltime = 10
+            var time = fulltime
+				var count = 200
+            
+            function clearCan() {
+                ctx.clearRect(0, 0, can.width, can.height)
+            }
+            
+            function whenClicked() {
+                if (pressed == 0) {
+                    clearCan()
+                    window.myVar = setInterval(countDown, count);
+                }
+                pressed += 1
+                text.innerHTML = "Times clicked: " + pressed
+                pos = getMousePos();
+                ctx.beginPath();
+                ctx.lineWidth = "0"
+                for (i = 0; i < 100; i++) {
+                    ctx.fillStyle = "rgb(" + (200 - i) + " 0 0)"
+                    ctx.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+                }
+                
+                ctx.fill();
+                //ctx.stroke();
+                
+            }
+            function getMousePos() {
+                var rect = can.getBoundingClientRect();
+                x = event.clientX - rect.left
+                y = event.clientY - rect.top
+                return {
+                    x, y
+                }
+            }
+            function countDown() {
+                var cps = Math.round((pressed / (fulltime - Math.round(time)) + Number.EPSILON) * 100) / 100
+                text2.innerHTML = "CPS: " + cps + " TIME: " + Math.round(time)
+                if (Math.round(time) == 0) {
+                    clearInterval(window.myVar)
+                    pressed = 0
+                    time = fulltime
+                    alert("Your CPS is " + cps + " clicks a second")
+                }
+                
+                time -= count / 1000
+                
+            }
+            
+            
+        </script>
+        <style>
+            p {
+                font-size: 20px;
+            }
+        </style>
+        
+    </body>
+    
+</html>
